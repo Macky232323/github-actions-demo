@@ -1,18 +1,26 @@
-name: meinErsterWorkflow
+name: CI
 
-on: push
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-    meinErsterJob:
-        runs-on: ubuntu-latest
-        steps:
-            - name: meinErsterSchritt
-              run: echo "Hello World!"
-    meinZweiterJob:
-        needs: meinErsterJob
-        runs-on: ubuntu-latest
-        steps:
-            - name: derErsteSchrittVonJob2
-              run: echo "Hallo ich bin der erste Schritt aus dem zweiten job"
-            - name: derZweiteSchrittVonJob2
-              run: echo "Hallo ich bin der zweite Schritt aus dem zweiten job"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This job will build the project"
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - run: echo "This job will run the tests"
+      
+  show-date:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Display current date
+        run: date
